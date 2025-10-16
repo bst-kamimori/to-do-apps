@@ -19,10 +19,12 @@ return new class extends Migration
         });
 
         DB::table('categories')->insert([
-            ['name' => 'テスト１２'],
-            ['created_at' => now()],
-            ['updated_at' => now()]
-        ]);
+            [
+                'name' => 'テスト１２',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+            ]);
     }
 
     /**

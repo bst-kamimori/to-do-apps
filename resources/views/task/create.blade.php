@@ -1,4 +1,4 @@
-<!-- resources/views/task/index.blade.php -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,51 +22,31 @@
 
         <tr>
             <th>案件名:</th>
-            <td>
-                <select name="project" id="project">
-                    <option value="">-- 案件を選択 --</option>
-                    @foreach ($csvcolums as $project => $categories)
-                        <option value="{{ $project }}">{{ $project }}</option>
-                    @endforeach
-                </select>
-            </td>
+       <select name="project_id">
+           @foreach($projects_names as $project)
+               <option value="{{$project->id}}">{{$project->name}}</option>
+           @endforeach
+       </select>
         </tr>
 
         <tr>
             <th>カテゴリ:</th>
-            <td>
-                <select name="category" id="category">
-                    <option value="">-- カテゴリを選択 --</option>
-                </select>
-            </td>
-        </tr>
-
-        <tr>
-            <th>業務名:</th>
-            <td>
-                <select name="work" id="work">
-                    <option value="">-- 業務を選択 --</option>
-                </select>
-            </td>
-        </tr>
-
-       <select name="project_id">
-           @foreach($projects_names as $project)
-               <option value="{{$p_name->id}}">{{$p_name->name}}</option>
-           @endforeach
-       </select>
-
         <select name="category_id">
             @foreach($categories as $category)
                 <option value="{{$category->id}}">{{$category->name}}</option>
             @endforeach
         </select>
+        </tr>
 
+        <tr>
+            <th>業務名:</th>
         <select name="operation_id">
             @foreach($operations as $operation)
                 <option value="{{$operation->id}}">{{$operation->name}}</option>
             @endforeach
         </select>
+        </tr>
+
         {{--        <script>--}}
 {{--            const csvData = @json($csvcolums);--}}
 

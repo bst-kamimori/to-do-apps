@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class Project_Name extends Model
 {
-    public function category()
+    public function project_names()
     {
-        return $this->hasOne(Profile::class);
+        return $this->hasOne(Category::class);
     }
+    protected $table = 'project_names';
+
 }

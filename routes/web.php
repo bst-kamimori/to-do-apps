@@ -10,10 +10,14 @@ Route::prefix('task')
         Route::get('', 'index')->name('index');
         Route::post('store','store')->name('store');
         Route::get('create','create')->name('create');
+        Route::get('masterlist','masterlist')->name('masterlist');
+        Route::post('masterlist','masterliststore')->name('masterlist.store');
+        Route::get('complete/list','completelist')->name('complete.list');
         Route::post('{id}/complete','complete')->name('complete');
         Route::get('{id}','show')->name('show');
         Route::put('{id}','update')->name('update');
         Route::delete('{id}','delete')->name('delete');
         Route::get('{id}/edit','edit')->name('edit');
-        Route::get('complete/list','completelist')->name('complete.list');
+
+
     });

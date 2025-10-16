@@ -8,9 +8,12 @@ use App\Models\Project_Name;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use DB;
 
 class TaskController extends Controller
 {
+
+
     public function index()
     {
 
@@ -94,7 +97,6 @@ class TaskController extends Controller
     {
         $Tasks=Task::findOrFail($id);
 
-// ここでセレクトボックスのカラムをひきわたしてあげないといけない。’projects’'cotegories''works'
         return view('task.edit',compact('Tasks'));
     }
 
@@ -108,9 +110,8 @@ class TaskController extends Controller
 
         $Tasks=Task::findOrFail($id);
         $Tasks->name = $request->input('name');
-        $Tasks->projects = $request->input('projects');
-        $Tasks->categories = $request->input('categories');
-        $Tasks->works = $request->input('works');
+        $Tasks->project_id = $request->input('project_id');
+        $Tasks->category_id = $request->input('category_id');
         $Tasks->start_date = $request->input('start_date');
         $Tasks->end_date = $request->input('end_date');
         $Tasks->progress = $request->input('progress');
@@ -148,4 +149,36 @@ class TaskController extends Controller
         return view('task.complete',compact('tasks'));
     }
 
+    public function masterlist(Request $request)
+    {
+        $projects = Project_Name::all();
+        $categories = Category::all();
+        $operations = Operation::all();
+
+
+        return view('task.master',compact('projects','categories','operations'));
+    }
+
+    public function masterliststore(Request $request)
+    {
+        $request->validate([
+            'projects' => 'required|max:100',
+            'categories' => 'required|max:100',
+            'operations' => 'required|max:300',
+        ]);
+
+        $projects = new Project_Name();
+        $categories = new Category();
+        $operations = new Operation();
+
+
+        $projects->projects = $request->input('projects');
+        $categories->categories = $request->input('categories');
+        $operations->operations = $request->input('operations');
+        $projects->save();
+        $categories->save();
+        $operations->save();
+
+        return redirect()->route('task.masterlist')->with('success','マスタが保存されました');
+    }
 }

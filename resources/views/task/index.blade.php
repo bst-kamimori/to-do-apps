@@ -2,11 +2,12 @@
 <html>
 <head>
     <title>タスク一覧</title>
-{{--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">--}}
 </head>
 <body>
 
 <p><a href="{{route('task.create')}}">タスクの登録</a></p>
+
+<p><a href="{{route('task.masterlist')}}">業務マスタの登録</a></p>
 
 <p><a href="{{route('task.complete.list')}}">完了済みタスク一覧</a></p>
 

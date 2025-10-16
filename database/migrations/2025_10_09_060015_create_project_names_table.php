@@ -19,9 +19,12 @@ return new class extends Migration
         });
 
         DB::table('project_names')->insert([
-            ['name' => 'テスト1'],
-            ['created_at' => now()],
-            ['updated_at' => now()]
+            [
+                'name' => 'テスト1',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        ]);
     }
 
     /**
