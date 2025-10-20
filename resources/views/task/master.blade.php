@@ -9,6 +9,7 @@
 <body>
 
 <form method="GET" action="{{ route('task.masterlist') }}">
+
     <label>案件</label>
     <select name="project_select" id="project-select">
         <option value="">-- 案件を選択 --</option>
@@ -45,10 +46,11 @@
     <button type="submit">反映</button>
 </form>
 
+
+
 <form method="POST" action="{{ route('task.masterlist.store') }}">
     @csrf
 
-    {{-- 新規を選んだときにコントローラ期待名に合わせる --}}
     @if(request('project_select') === 'new')
         <label>新規案件名</label>
         <input type="text" name="project_names" value="{{ old('project_names') }}">
@@ -61,10 +63,10 @@
 
     @if(request('operation_select') === 'new')
         <label>新規業務名</label>
-        <input type="text" name="operations" value="{{ old('$operations') }}">
+        <input type="text" name="operations" value="{{ old('operations') }}">
     @endif
 
-    {{-- 既存選択値をサーバへ渡すなら隠しフィールドで補う --}}
+{{--    既存値を渡す--}}
     <input type="hidden" name="project_select" value="{{ request('project_select') }}">
     <input type="hidden" name="category_select" value="{{ request('category_select') }}">
     <input type="hidden" name="operation_select" value="{{ request('operation_select') }}">

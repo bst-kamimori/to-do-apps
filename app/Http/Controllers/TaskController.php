@@ -8,12 +8,13 @@ use App\Models\Project_Name;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use DB;
+use Illuminate\Support\Facades\DB;
+
 
 class TaskController extends Controller
 {
 
-
+    /**  */
     public function index()
     {
 
@@ -161,24 +162,44 @@ class TaskController extends Controller
 
     public function masterliststore(Request $request)
     {
-        $request->validate([
-            'projects' => 'required|max:100',
-            'categories' => 'required|max:100',
-            'operations' => 'required|max:300',
+        $date = $request->validate([
+            'project_select' => 'nullable',
+            'category_select' => 'nullable',
+            'operation_select' => 'nullable',
+            'project_names' => 'required_if:project_select,new|string|max:100',
+            'categories' => 'required_if:category_select,new|string|max:100',
+            'operations' => 'required_if:operation_select,new|string|max:300',
         ]);
 
-        $projects = new Project_Name();
-        $categories = new Category();
-        $operations = new Operation();
+        DB::beginTransaction();
+        try {
+            if (isset($date['project_select']) && $date['project_select'] === 'new' && !empty($date['project_names'])){
+                $projects = new Project_Name();
+                $projects->name = $date['project_names'];
+                $projects->save();
+            }
+
+            if(isset($date['category_select']) && $date['category_select'] === 'new' && !empty($date['categories'])){
+                $categories = new Category();
+                $categories->name = $date['categories'];
+                $categories->save();
+            }
+
+            if(isset($date['operation_select']) && $date['operation_select'] === 'new' && !empty($date['operations'])){
+                $operations = new Operation();
+                $operations->name = $date['operations'];
+                $operations->save();
+            }
 
 
-        $projects->projects = $request->input('projects');
-        $categories->categories = $request->input('categories');
-        $operations->operations = $request->input('operations');
-        $projects->save();
-        $categories->save();
-        $operations->save();
+            DB::commit();
+        } catch(\Throwable $e) {
+            DB::rollBack();
+            return back()->withErrors([
+                'error' => '保存中にエラーが発生しました。:' . $e->getMessage(),
+                ])->withInput();
+        }
 
-        return redirect()->route('task.masterlist')->with('success','マスタが保存されました');
+        return redirect()->route('task.masterlist')->with('success','マスタが保存されました。');
     }
 }
