@@ -18,9 +18,10 @@ class TaskController extends Controller
     public function index()
     {
 
-        $tasks = Task::where('is_completed',false)->get();
+        $projects = Project_Name::all();
 
-        return view('task.index', compact('tasks' ));
+
+        return view('task.index', compact('projects', ));
     }
 
 
@@ -67,8 +68,8 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:300',
-            'remarks' => 'required|max:60000',
+            'name' => 'required|string|max:300',
+            'remarks' => 'required|string|max:60000',
         ]);
 
         $Tasks = new Task();

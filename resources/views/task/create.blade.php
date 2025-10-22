@@ -18,74 +18,38 @@
                     <p>{{ $errors->first('name') }}</p>
                 @endif
             </td>
-        </tr>
-
         <tr>
             <th>案件名:</th>
-       <select name="project_id">
-           @foreach($projects_names as $project)
-               <option value="{{$project->id}}">{{$project->name}}</option>
-           @endforeach
-       </select>
+            <td>
+                <select name="project_id" id="project_id">
+                    @foreach($projects_names as $project)
+                        <option value="{{ $project->id }}">{{ $project->name }}</option>
+                    @endforeach
+                </select>
+            </td>
         </tr>
 
         <tr>
             <th>カテゴリ:</th>
-        <select name="category_id">
-            @foreach($categories as $category)
-                <option value="{{$category->id}}">{{$category->name}}</option>
-            @endforeach
-        </select>
+            <td>
+                <select name="category_id" id="category_id">
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </td>
         </tr>
 
         <tr>
             <th>業務名:</th>
-        <select name="operation_id">
-            @foreach($operations as $operation)
-                <option value="{{$operation->id}}">{{$operation->name}}</option>
-            @endforeach
-        </select>
+            <td>
+                <select name="operation_id" id="operation_id">
+                    @foreach($operations as $operation)
+                        <option value="{{ $operation->id }}">{{ $operation->name }}</option>
+                    @endforeach
+                </select>
+            </td>
         </tr>
-
-        {{--        <script>--}}
-{{--            const csvData = @json($csvcolums);--}}
-
-{{--            const projectSelect = document.getElementById('project');--}}
-{{--            const categorySelect = document.getElementById('category');--}}
-{{--            const workSelect = document.getElementById('work');--}}
-
-{{--            projectSelect.addEventListener('change', function () {--}}
-{{--                const project = this.value;--}}
-{{--                categorySelect.innerHTML = '<option value="">-- カテゴリを選択 --</option>';--}}
-{{--                workSelect.innerHTML = '<option value="">-- 業務を選択 --</option>';--}}
-
-{{--                if (project && csvData[project]) {--}}
-{{--                    Object.keys(csvData[project]).forEach(category => {--}}
-{{--                        const opt = document.createElement('option');--}}
-{{--                        opt.value = category;--}}
-{{--                        opt.textContent = category;--}}
-{{--                        categorySelect.appendChild(opt);--}}
-{{--                    });--}}
-{{--                }--}}
-{{--            });--}}
-
-{{--            categorySelect.addEventListener('change', function () {--}}
-{{--                const project = projectSelect.value;--}}
-{{--                const category = this.value;--}}
-{{--                workSelect.innerHTML = '<option value="">-- 業務を選択 --</option>';--}}
-
-{{--                if (project && category && csvData[project][category]) {--}}
-{{--                    csvData[project][category].forEach(work => {--}}
-{{--                        const opt = document.createElement('option');--}}
-{{--                        opt.value = work;--}}
-{{--                        opt.textContent = work;--}}
-{{--                        workSelect.appendChild(opt);--}}
-{{--                    });--}}
-{{--                }--}}
-{{--            });--}}
-{{--        </script>--}}
-
-        <tr>
             <th>開始日:</th>
             <td>
                 <input type="datetime-local" name="start_date" value="{{ old('start_date') }}" size="10">

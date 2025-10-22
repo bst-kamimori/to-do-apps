@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project_Name extends Model
 {
-    public function project_names()
-    {
-        return $this->hasOne(Category::class);
-    }
     protected $table = 'project_names';
 
+    public function cagetories(): HasMany
+    {
+        return $this->hasMany(Category::class, 'project_name_id', 'id');
+    }
 }
