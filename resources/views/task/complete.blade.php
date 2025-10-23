@@ -30,19 +30,25 @@
         <th>進捗（％）</th>
         <th>備考</th>
     </tr>
-    @foreach($tasks as $index =>$task)
+    @foreach($projects as $index =>$project)
+        @foreach($project->cagetories as $category)
+            @foreach($category->operations as $operation)
+                @foreach($operation->tasks as $task)
         <tr>
             <td>{{$index+1}}.</td>
-            <td><a href="{{route('task.show',['id'=>$task->id])}}">{{$task->name}}</a></td>
-            <td>{{$task->projects}}</td>
-            <td>{{$task->categories}}</td>
-            <td>{{$task->works}}</td>
+{{--            <td><a href="{{route('task.show',['id'=>$task->id])}}">{{$task->name}}</a></td>--}}
+            <td>{{$task->name}}</td>
+            <td>{{$project->name}}</td>
+            <td>{{$category->name}}</td>
+            <td>{{$operation->name}}</td>
             <td>{{$task->start_date}}</td>
             <td>{{$task->end_date}}</td>
             <td>{{$task->progress}}</td>
             <td>{{$task->remarks}}</td>
         </tr>
-
+                @endforeach
+            @endforeach
+        @endforeach
     @endforeach
 
 </table>

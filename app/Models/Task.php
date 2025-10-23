@@ -16,6 +16,6 @@ class Task extends Model
 
     public function operations(): BelongsTo
     {
-        return $this->belongsTo(Operation::class, 'id');
+        return $this->belongsTo(Operation::class, 'operation_id');
     }
 }

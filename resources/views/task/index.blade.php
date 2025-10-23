@@ -40,7 +40,7 @@
         @foreach($project->cagetories as $category)
             @foreach($category->operations as $operation)
                 @foreach($operation->tasks as $task)
-                         dd($task);
+
 
 
 
@@ -52,10 +52,10 @@
                     <td>{{$project->name}}</td>
                     <td>{{$category->name}}</td>
                     <td>{{$operation->name}}</td>
-                    <td>{{$task->start_date}}</td>
-                    <td>{{$task->end_date}}</td>
-                    <td>{{$task->progress}}</td>
-                    <td>{{$task->remarks}}</td>
+{{--                    <td>{{$task->start_date}}</td>--}}
+{{--                    <td>{{$task->end_date}}</td>--}}
+{{--                    <td>{{$task->progress}}</td>--}}
+{{--                    <td>{{$task->remarks}}</td>--}}
                     <td></td>
                     <td></td>
                     <td></td>

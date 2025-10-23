@@ -74,17 +74,17 @@ class TaskController extends Controller
 
         $Tasks = new Task();
         $Tasks->name = $request->input('name');
-//        $Tasks->projects = $request->input('projects');
-//        $Tasks->categories = $request->input('categories');
-//        $Tasks->works = $request->input('works');
-        $Tasks->project_id = $request->input('project_id');
-        $Tasks->category_id = $request->input('category_id');
+//        $project_names->name = $request->input('name');
+//        $Task->category_id = $request->input('category_id');
         $Tasks->operation_id = $request->input('operation_id');
         $Tasks->start_date = $request->input('start_date');
         $Tasks->end_date = $request->input('end_date');
         $Tasks->progress = $request->input('progress');
         $Tasks->remarks = $request->input('remarks');
         $Tasks->save();
+
+        $projects = Project_Name::all();
+
 
         return redirect()->route('task.index')->with('success','タスクが保存されました');
     }
@@ -147,8 +147,9 @@ class TaskController extends Controller
     public function completelist()
     {
         $tasks = Task::where('is_completed',true)->get();
+        $projects = Project_Name::all();
 
-        return view('task.complete',compact('tasks'));
+        return view('task.complete',compact('tasks','projects'));
     }
 
     public function masterlist(Request $request)

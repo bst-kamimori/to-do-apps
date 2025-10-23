@@ -15,6 +15,6 @@ class Category extends Model
 
     public function operations(): HasMany
     {
-        return $this->hasMany(Operation::class);
+        return $this->hasMany(Operation::class,'category_id','project_id');
     }
 }
