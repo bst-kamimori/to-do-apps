@@ -36,36 +36,21 @@
         <th>備考</th>
         <th>更新日</th>
     </tr>
-    @foreach($projects as $index =>$project)
-        @foreach($project->cagetories as $category)
-            @foreach($category->operations as $operation)
-                @foreach($operation->tasks as $task)
+    @foreach($tasks as $task)
 
+        <tr>
+            <td>{{$loop->iteration}}.</td>
+            <td><a href="{{route('task.show',['id'=>$task->id])}}">{{$task->name}}</a></td>
+            <td>{{ optional($task->project)->name }}</td>
+            <td>{{ optional($task->category)->name }}</td>
+            <td>{{ optional($task->operation)->name }}</td>
+            <td>{{$task->start_date}}</td>
+            <td>{{$task->end_date}}</td>
+            <td>{{$task->progress}}</td>
+            <td>{{$task->remarks}}</td>
+            <td>{{$task->created_at}}</td>
+        </tr>
 
-
-
-
-                <tr>
-                    <td>{{$index+1}}.</td>
-        {{--            <td><a href="{{route('task.show',['id'=>$task->id])}}">{{$task->name}}</a></td>--}}
-                    <td>神森さん</td>
-                    <td>{{$project->name}}</td>
-                    <td>{{$category->name}}</td>
-                    <td>{{$operation->name}}</td>
-{{--                    <td>{{$task->start_date}}</td>--}}
-{{--                    <td>{{$task->end_date}}</td>--}}
-{{--                    <td>{{$task->progress}}</td>--}}
-{{--                    <td>{{$task->remarks}}</td>--}}
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                <td>{{$operation->created_at}}</td>
-                </tr>
-
-                @endforeach
-          @endforeach
-        @endforeach
     @endforeach
 
 </table>　　　　

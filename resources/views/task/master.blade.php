@@ -8,7 +8,8 @@
 </head>
 <body>
 
-<form method="GET" action="{{ route('task.masterlist') }}">
+
+<form action="/task/masterlist" method="GET">
 
     <label>案件</label>
     <select name="project_select" id="project-select">
@@ -35,9 +36,9 @@
     <label>業務名</label>
     <select name="operation_select" id="operation-select">
         <option value="">-- 業務名を選択 --</option>
-        @foreach ($operations as $op)
-            <option value="{{ $op->id }}" {{ request('operation_select') == $op->id ? 'selected' : '' }}>
-                {{ $op->name }}
+        @foreach ($operations as $operation)
+            <option value="{{ $operation->id }}" {{ request('operation_select') == $operation->id ? 'selected' : '' }}>
+                {{ $operation->name }}
             </option>
         @endforeach
         <option value="new" {{ request('operation_select') === 'new' ? 'selected' : '' }}>＋新規追加</option>
@@ -45,6 +46,27 @@
 
     <button type="submit">反映</button>
 </form>
+
+<script>
+    const selectTargets = {
+        'project-select': 'project_select',
+        'category-select': 'category_select',
+    };
+
+    for (const [id, paramName] of Object.entries(selectTargets)) {
+        const selectEl = document.getElementById(id);
+        if (!selectEl) continue;
+
+        selectEl.addEventListener('change', () => {
+            const value = selectEl.value;
+            const url = new URL(window.location.href);
+            url.searchParams.set(paramName, value);
+            window.location.href = url.pathname + '?' + url.searchParams.toString();
+        });
+    }
+
+</script>
+
 
 
 
@@ -75,6 +97,8 @@
         <button type="submit">登録する</button>
     @endif
 </form>
+
+<p><a href="{{route('task.index')}}">タスク一覧へ戻る</a></p>
 
 </body>
 </html>

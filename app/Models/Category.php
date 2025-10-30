@@ -17,4 +17,9 @@ class Category extends Model
     {
         return $this->hasMany(Operation::class,'category_id','project_id');
     }
+
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class,'project_name_id','id');
+    }
 }

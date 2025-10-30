@@ -12,10 +12,19 @@ class Task extends Model
 
     protected $table = 'tasks';
 
-    protected $guarded = [];
 
-    public function operations(): BelongsTo
+    public function project_name(): BelongsTo
     {
-        return $this->belongsTo(Operation::class, 'operation_id');
+        return $this->belongsTo(Project_Name::class, 'project_name_id', 'id');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function operation(): BelongsTo
+    {
+        return $this->belongsTo(Operation::class, 'operation_id', 'id');
     }
 }

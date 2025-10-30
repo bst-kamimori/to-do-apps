@@ -13,4 +13,11 @@ class Project_Name extends Model
     {
         return $this->hasMany(Category::class, 'project_name_id', 'id');
     }
+
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'project_name_id', 'id');
+    }
+
+
 }

@@ -15,6 +15,7 @@ class Operation extends Model
 
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class,'operation_id','id');
+
     }
 }

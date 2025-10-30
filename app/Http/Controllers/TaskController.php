@@ -15,120 +15,134 @@ class TaskController extends Controller
 {
 
     /**  */
-    public function index()
+    public function index(Request $request)
     {
 
-        $projects = Project_Name::all();
+        $tasks = Task::with(['project_name','category','operation'])->get();
 
-
-        return view('task.index', compact('projects', ));
+        return view('task.index', compact('tasks'));
     }
 
 
-    public function create()
+    public function create(Request $request)
     {
-//        $csvpath = storage_path('0801_業務マスタ.csv');
-//            $csvcolums = [];
-//
-//            if (file_exists($csvpath)) {
-//                $file = fopen($csvpath, 'r');
-//                if ($file !== false) {
-//                    $header = fgetcsv($file); // ヘッダーを読み飛ばす
-//
-//                    while (($row = fgetcsv($file)) !== false) {
-//                        [$project, $category, $work] = $row;
-//
-//                        // 案件ごとにまとめる
-//                        if (!isset($csvcolums[$project])) {
-//                            $csvcolums[$project] = [];
-//                        }
-//
-//                        // カテゴリごとにまとめる
-//                        if (!isset($csvcolums[$project][$category])) {
-//                            $csvcolums[$project][$category] = [];
-//                        }
-//
-//                        // 業務を追加
-//                        $csvcolums[$project][$category][] = $work;
-//                    }
-//
-//                    fclose($file);
-//                }
-//            }
+        $project_names = Project_Name::all();
 
-            $projects_names = Project_Name::all();
-            $categories = Category::all();
-            $operations = Operation::all();
+        $selectedProjectId = $request->input('project_select');
+        $selectedCategoryId = $request->input('category_select');
 
-            $tasks = Task::all();
+        $categories = collect();
+        $operations = collect();
 
-            return view('task.create', compact('tasks', 'projects_names','categories','operations'));
+        if (!is_null($selectedProjectId) && $selectedProjectId !== '') {
+            $categories = Category::where('project_name_id', $selectedProjectId)->get();
+        } else {
+
+             $categories = Category::all();
+        }
+
+        if (!is_null($selectedCategoryId) && $selectedCategoryId !== '') {
+            $operations = Operation::where('category_id', $selectedCategoryId)->get();
+        } else {
+
+             $operations = Operation::all();
+        }
+
+            $task = Task::all();
+
+            return view('task.create', compact('task', 'project_names','categories','operations'));
     }
 
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => 'required|string|max:300',
+            'progress' => 'required|string|min:0|max:100',
             'remarks' => 'required|string|max:60000',
         ]);
 
-        $Tasks = new Task();
-        $Tasks->name = $request->input('name');
-//        $project_names->name = $request->input('name');
-//        $Task->category_id = $request->input('category_id');
-        $Tasks->operation_id = $request->input('operation_id');
-        $Tasks->start_date = $request->input('start_date');
-        $Tasks->end_date = $request->input('end_date');
-        $Tasks->progress = $request->input('progress');
-        $Tasks->remarks = $request->input('remarks');
-        $Tasks->save();
-
-        $projects = Project_Name::all();
+        $task = new Task();
+        $task->name = $request->input('name');
+        $task->project_name_id = $request->input('project_select');
+        $task->category_id = $request->input('category_select');
+        $task->operation_id = $request->input('operation_select');
+        $task->start_date = $request->input('start_date');
+        $task->end_date = $request->input('end_date');
+        $task->progress = $request->input('progress');
+        $task->remarks = $request->input('remarks');
+        $task->save();
 
 
         return redirect()->route('task.index')->with('success','タスクが保存されました');
     }
 
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        $Tasks = Task::findOrFail($id);
-        return view('task.show',compact('Tasks'));
+        $task= Task::with(['project_name','category','operation'])->findOrFail($id);
+        return view('task.show',compact('task'));
     }
 
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
-        $Tasks=Task::findOrFail($id);
+        $project_names = Project_Name::all();
 
-        return view('task.edit',compact('Tasks'));
+        $selectedProjectId = $request->input('project_select');
+        $selectedCategoryId = $request->input('category_select');
+
+        $categories = collect();
+        $operations = collect();
+
+        if (!is_null($selectedProjectId) && $selectedProjectId !== '') {
+            $categories = Category::where('project_name_id', $selectedProjectId)->get();
+        } else {
+
+            $categories = Category::all();
+        }
+
+        if (!is_null($selectedCategoryId) && $selectedCategoryId !== '') {
+            $operations = Operation::where('category_id', $selectedCategoryId)->get();
+        } else {
+
+            $operations = Operation::all();
+        }
+
+        $task = Task::with(['project_name','category','operation'])->findOrFail($id);
+
+        return view('task.edit', compact('task','project_names','categories','operations'));
+
+
     }
 
     public function update(Request $request,$id)
     {
+        $task = Task::findOrFail($id);
+
         $request->validate([
-            'name'=>'required | min:1 | max:500',
-            'progress' => 'required | min:0 | max:100',
-            'remarks' => 'required | min:0 | max:6000'
+            'name'=>'required|string|min:1|max:500',
+            'progress' => 'required|string|min:0|max:100',
+            'remarks' => 'required|string|min:0|max:6000'
         ]);
 
-        $Tasks=Task::findOrFail($id);
-        $Tasks->name = $request->input('name');
-        $Tasks->project_id = $request->input('project_id');
-        $Tasks->category_id = $request->input('category_id');
-        $Tasks->start_date = $request->input('start_date');
-        $Tasks->end_date = $request->input('end_date');
-        $Tasks->progress = $request->input('progress');
-        $Tasks->remarks = $request->input('remarks');
-        $Tasks->save();
+        $task->name = $request->input('name');
+        $task->project_name_id = $request->input('project_select');
+        $task->category_id = $request->input('category_select');
+        $task->operation_id = $request->input('operation_select');
+        $task->start_date = $request->input('start_date');
+        $task->end_date = $request->input('end_date');
+        $task->progress = $request->input('progress');
+        $task->remarks = $request->input('remarks');
+        $task->save();
 
-        return redirect()->route('task.show',['id'=>$Tasks->id])
+        return redirect()->route('task.show',['id'=>$task->id])
             ->with('success',"更新しました！");
     }
 
     public function delete($id)
     {
-        try{
-            $Tasks=Task::findOrFail($id);
-            $Tasks->delete();
+        try {
+            $tasks = Task::findOrFail($id);
+            $tasks->delete();
             return redirect()->route('task.index')->with('remove','削除しました!');
         } catch (ModelNotFoundException $e) {
             abort(404);
@@ -147,17 +161,27 @@ class TaskController extends Controller
     public function completelist()
     {
         $tasks = Task::where('is_completed',true)->get();
-        $projects = Project_Name::all();
 
-        return view('task.complete',compact('tasks','projects'));
+
+        return view('task.complete',compact('tasks'));
     }
 
     public function masterlist(Request $request)
     {
         $projects = Project_Name::all();
-        $categories = Category::all();
-        $operations = Operation::all();
 
+        $selectedProjectId = $request->input('project_select');
+        $categories = collect();
+        $operations = collect();
+
+        if (!is_null($selectedProjectId)) {
+            $categories = Category::where('project_name_id', $selectedProjectId)->get();
+        }
+
+        if (!is_null($request->input('category_select'))) {
+            $selectedCategoryId = $request->input('category_select');
+            $operations = Operation::where('category_id', $selectedCategoryId)->get();
+        }
 
         return view('task.master',compact('projects','categories','operations'));
     }
@@ -184,17 +208,25 @@ class TaskController extends Controller
             if(isset($date['category_select']) && $date['category_select'] === 'new' && !empty($date['categories'])){
                 $categories = new Category();
                 $categories->name = $date['categories'];
+                if (isset($date['project_select'])) {
+                    $categories->project_name_id = ($date['project_select'] === 'new' && isset($projects)) ? $projects->id : $date['project_select'];
+                }
                 $categories->save();
             }
 
             if(isset($date['operation_select']) && $date['operation_select'] === 'new' && !empty($date['operations'])){
                 $operations = new Operation();
                 $operations->name = $date['operations'];
+                if (isset($date['category_select'])) {
+                    $operations->category_id = ($date['category_select'] === 'new' && isset($categories)) ? $categories->id : $date['category_select'];
+                }
                 $operations->save();
             }
 
 
             DB::commit();
+
+
         } catch(\Throwable $e) {
             DB::rollBack();
             return back()->withErrors([

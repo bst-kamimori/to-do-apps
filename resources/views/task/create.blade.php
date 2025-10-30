@@ -5,7 +5,6 @@
     <title>新規作成ページ</title>
 </head>
 <body>
-<h2>新規タスク作成フォーム</h2>
 
 <form action="{{ route('task.store') }}" method="POST">
     @csrf
@@ -18,12 +17,17 @@
                     <p>{{ $errors->first('name') }}</p>
                 @endif
             </td>
+        </tr>
+
         <tr>
             <th>案件名:</th>
             <td>
-                <select name="project_id" id="project_id">
-                    @foreach($projects_names as $project)
-                        <option value="{{ $project->id }}">{{ $project->name }}</option>
+                <select name="project_select" id="project_select">
+                    <option value="">-- 選択 --</option>
+                    @foreach ($project_names as $project)
+                        <option value="{{ $project->id }}" {{ request('project_select') == $project->id ? 'selected' : '' }}>
+                            {{ $project->name }}
+                        </option>
                     @endforeach
                 </select>
             </td>
@@ -32,9 +36,12 @@
         <tr>
             <th>カテゴリ:</th>
             <td>
-                <select name="category_id" id="category_id">
+                <select name="category_select" id="category_select">
+                    <option value="">-- 選択 --</option>
                     @foreach($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        <option value="{{ $category->id }}" {{ request('category_select') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
                     @endforeach
                 </select>
             </td>
@@ -43,13 +50,18 @@
         <tr>
             <th>業務名:</th>
             <td>
-                <select name="operation_id" id="operation_id">
+                <select name="operation_select" id="operation_select">
+                    <option value="">-- 選択 --</option>
                     @foreach($operations as $operation)
-                        <option value="{{ $operation->id }}">{{ $operation->name }}</option>
+                        <option value="{{ $operation->id }}" {{ request('operation_select') == $operation->id ? 'selected' : '' }}>
+                            {{ $operation->name }}
+                        </option>
                     @endforeach
                 </select>
             </td>
         </tr>
+
+        <tr>
             <th>開始日:</th>
             <td>
                 <input type="datetime-local" name="start_date" value="{{ old('start_date') }}" size="10">
@@ -97,8 +109,40 @@
     </table>
 </form>
 
-
 <p><a href="/task">タスク一覧へ</a></p>
+
+<p><a href="/task/{{ route('task.masterlist') }}">マスタ登録へ</a></p>
+
+<script>
+    const selectTargets = {
+        'project_select': 'project_select',
+        'category_select': 'category_select'
+    };
+
+    for (const [id, paramName] of Object.entries(selectTargets)) {
+        const selectEl = document.getElementById(id);
+        if (!selectEl) continue;
+
+        selectEl.addEventListener('change', () => {
+            const value = selectEl.value || '';
+            const url = new URL(window.location.href);
+            if (value) url.searchParams.set(paramName, value);
+            else url.searchParams.delete(paramName);
+
+            // project を変えたら下位をクリア
+            if (id === 'project_select') {
+                url.searchParams.delete('category_select');
+                url.searchParams.delete('operation_select');
+            }
+            if (id === 'category_select') {
+                url.searchParams.delete('operation_select');
+            }
+
+            window.location.href = url.pathname + (url.search ? '?' + url.searchParams.toString() : '');
+        });
+    }
+</script>
 
 </body>
 </html>
+<?php
