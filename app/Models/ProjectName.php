@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Project_Name extends Model
+class ProjectName extends Model
 {
     protected $table = 'project_names';
+    use HasFactory;
 
     public function cagetories(): HasMany
     {

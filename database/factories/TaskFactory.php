@@ -20,10 +20,15 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'start_date'=>fake()->word(),
-            'end_date'=>fake()->word(),
+            'name'=>fake()->word(),
+            'start_date'=>fake()->dateTimeBetween(),
+            'end_date'=>fake()->dateTimeBetween(),
             'progress'=>fake()->numberBetween(0, 100),
-            'remarks'=>fake()->text()
+            'remarks'=>fake()->text(),
+            'created_at'=>now(),
+            'updated_at'=>now(),
+            'operation_id'=>fake()->numberBetween(1, 10),
+            'is_completed'=>fake()->numberBetween(0, 1),
         ];
     }
 }

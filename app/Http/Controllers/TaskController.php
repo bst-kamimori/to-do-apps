@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Operation;
-use App\Models\Project_Name;
+use App\Models\ProjectName;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -20,13 +20,27 @@ class TaskController extends Controller
 
         $tasks = Task::with(['project_name','category','operation'])->get();
 
-        return view('task.index', compact('tasks'));
+        $keyword = $request->input('keyword');
+
+        if(!empty($keyword)) {
+            $tasks->where('name','LIKE',"%{$keyword}%")
+                ->orWhere('body','LIKE',"%{$keyword}%")
+                ->orWhere('start_date','LIKE',"%{$keyword}%")
+                ->orWhere('end_date','LIKE',"%{$keyword}%")
+                ->orWhere('progress','LIKE',"%{$keyword}%")
+                ->orWhere('remarks','LIKE',"%{$keyword}%")
+                ->orWhere('created_at','LIKE',"%{$keyword}%")
+                ->paginate(10);
+
+        }
+
+        return view('task.index', compact('tasks','keyword'));
     }
 
 
     public function create(Request $request)
     {
-        $project_names = Project_Name::all();
+        $project_names = ProjectName::all();
 
         $selectedProjectId = $request->input('project_select');
         $selectedCategoryId = $request->input('category_select');
@@ -48,9 +62,11 @@ class TaskController extends Controller
              $operations = Operation::all();
         }
 
-            $task = Task::all();
+         $task = Task::all();
 
-            return view('task.create', compact('task', 'project_names','categories','operations'));
+        $keyword = null;
+
+            return view('task.create', compact('task', 'project_names','categories','operations','keyword'));
     }
 
     public function store(Request $request)
@@ -85,7 +101,7 @@ class TaskController extends Controller
 
     public function edit(Request $request,$id)
     {
-        $project_names = Project_Name::all();
+        $project_names = ProjectName::all();
 
         $selectedProjectId = $request->input('project_select');
         $selectedCategoryId = $request->input('category_select');
@@ -168,7 +184,7 @@ class TaskController extends Controller
 
     public function masterlist(Request $request)
     {
-        $projects = Project_Name::all();
+        $projects = ProjectName::all();
 
         $selectedProjectId = $request->input('project_select');
         $categories = collect();
@@ -200,7 +216,7 @@ class TaskController extends Controller
         DB::beginTransaction();
         try {
             if (isset($date['project_select']) && $date['project_select'] === 'new' && !empty($date['project_names'])){
-                $projects = new Project_Name();
+                $projects = new ProjectName();
                 $projects->name = $date['project_names'];
                 $projects->save();
             }

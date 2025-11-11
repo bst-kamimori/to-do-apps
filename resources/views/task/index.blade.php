@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>タスク一覧</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -12,8 +13,8 @@
 <p><a href="{{route('task.complete.list')}}">完了済みタスク一覧</a></p>
 
 <form action="{{route('task.index')}}" method="GET">
-{{--    <input type="text" name="keyword" value="{{$keyword??''}}">--}}
-{{--    <button type="submit">検索</button>--}}
+    <input type="text" name="keyword" value="{{$keyword??''}}">
+    <button type="submit">検索</button>
 </form>
 
 {{--@php--}}
@@ -23,7 +24,12 @@
 {{--<a href ="{{route('news.index',['sort'=>$nextSort,'keyword'=>$keyword])}}">投稿日付でソート({{$sort === '0' ? '昇順' : '降順' }})--}}
 {{--</a>--}}
 
-<table >
+
+@if(isset($keyword) && $tasks->isEmpty())
+    <p>「{{$keyword}}」はヒットしませんでした。</p>
+@else
+
+<table>
     <tr>
         <th>No.</th>
         <th>担当</th>
@@ -52,16 +58,9 @@
         </tr>
 
     @endforeach
-
 </table>　　　　
+@endif
 
-{{--@if($list->isEmpty() && isset($keyword))--}}
-{{--    <p>「{{$keyword}}」はヒットしませんでした。</p>--}}
-{{--@endif--}}
-
-{{--<div>--}}
-{{--    {{ $list->links() }}--}}
-{{--</div>--}}
 
 @if(session('success'))
     <p>{{session('success')}}</p>

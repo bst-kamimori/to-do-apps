@@ -35,9 +35,9 @@
             <td>{{$loop->iteration}}.</td>
             <td><a href="{{route('task.show',['id'=>$task->id])}}">{{$task->name}}</a></td>
             <td>{{$task->name}}</td>
-            <td>{{$task->project_name->name}}</td>
-            <td>{{$task->category->name}}</td>
-            <td>{{$task->operation->name}}</td>
+            <td>{{ optional($task->project)->name }}</td>
+            <td>{{ optional($task->category)->name }}</td>
+            <td>{{ optional($task->operation)->name }}</td>
             <td>{{$task->start_date}}</td>
             <td>{{$task->end_date}}</td>
             <td>{{$task->progress}}</td>
