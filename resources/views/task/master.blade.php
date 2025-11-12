@@ -99,6 +99,6 @@
 </form>
 
 <p><a href="{{route('task.index')}}">タスク一覧へ戻る</a></p>
-
+<p><a href="{{route('task.create')}}">タスクの新規作成へ戻る</a></p>
 </body>
 </html>

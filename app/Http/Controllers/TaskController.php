@@ -18,23 +18,43 @@ class TaskController extends Controller
     public function index(Request $request)
     {
 
-        $tasks = Task::with(['project_name','category','operation'])->get();
+        $query = Task::with(['project_name','category','operation']);
 
-        $keyword = $request->input('keyword');
+        // 統一したパラメータ名で取得
+        $name = $request->input('name');
+        $selectedProjectId = $request->input('project_select');
+        $selectedCategoryId = $request->input('category_select');
+        $selectedOperationId = $request->input('operation_select');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-        if(!empty($keyword)) {
-            $tasks->where('name','LIKE',"%{$keyword}%")
-                ->orWhere('body','LIKE',"%{$keyword}%")
-                ->orWhere('start_date','LIKE',"%{$keyword}%")
-                ->orWhere('end_date','LIKE',"%{$keyword}%")
-                ->orWhere('progress','LIKE',"%{$keyword}%")
-                ->orWhere('remarks','LIKE',"%{$keyword}%")
-                ->orWhere('created_at','LIKE',"%{$keyword}%")
-                ->paginate(10);
-
+        if (!empty($name)) {
+            $query->where('name', 'LIKE', "%{$name}%");
+        }
+        if (!empty($selectedProjectId)) {
+            $query->where('project_name_id', $selectedProjectId);
+        }
+        if (!empty($selectedCategoryId)) {
+            $query->where('category_id', $selectedCategoryId);
+        }
+        if (!empty($selectedOperationId)) {
+            $query->where('operation_id', $selectedOperationId);
+        }
+        if (!empty($startDate)) {
+            $query->whereDate('start_date', $startDate);
+        }
+        if (!empty($endDate)) {
+            $query->whereDate('end_date', $endDate);
         }
 
-        return view('task.index', compact('tasks','keyword'));
+        $tasks = $query->paginate(10)->withQueryString();
+
+        $project_names = ProjectName::all();
+        $categories = Category::all();
+        $operations = Operation::all();
+
+
+        return view('task.index', compact('tasks', 'project_names', 'categories', 'operations'));
     }
 
 
@@ -174,12 +194,44 @@ class TaskController extends Controller
         return redirect()->route('task.complete.list')->with('completed','タスクを完了済みにしました');
     }
 
-    public function completelist()
+    public function completelist(Request $request)
     {
-        $tasks = Task::where('is_completed',true)->get();
+        $query = Task::where('is_completed',true);
+                 Task::with(['project_name','category','operation']);
 
+        $name = $request->input('name');
+        $selectedProjectId = $request->input('project_select');
+        $selectedCategoryId = $request->input('category_select');
+        $selectedOperationId = $request->input('operation_select');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-        return view('task.complete',compact('tasks'));
+        if (!empty($name)) {
+            $query->where('name', 'LIKE', "%{$name}%");
+        }
+        if (!empty($selectedProjectId)) {
+            $query->where('project_name_id', $selectedProjectId);
+        }
+        if (!empty($selectedCategoryId)) {
+            $query->where('category_id', $selectedCategoryId);
+        }
+        if (!empty($selectedOperationId)) {
+            $query->where('operation_id', $selectedOperationId);
+        }
+        if (!empty($startDate)) {
+            $query->whereDate('start_date', $startDate);
+        }
+        if (!empty($endDate)) {
+            $query->whereDate('end_date', $endDate);
+        }
+
+        $tasks = $query->paginate(10)->withQueryString();
+
+        $project_names = ProjectName::all();
+        $categories = Category::all();
+        $operations = Operation::all();
+
+        return view('task.complete',compact('tasks', 'project_names', 'categories', 'operations'));
     }
 
     public function masterlist(Request $request)

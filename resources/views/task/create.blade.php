@@ -111,7 +111,7 @@
 
 <p><a href="/task">タスク一覧へ</a></p>
 
-<p><a href="/task/{{ route('task.masterlist') }}">マスタ登録へ</a></p>
+<p><a href="{{ route('task.masterlist') }}">マスタ登録へ</a></p>
 
 <script>
     const selectTargets = {
@@ -129,7 +129,6 @@
             if (value) url.searchParams.set(paramName, value);
             else url.searchParams.delete(paramName);
 
-            // project を変えたら下位をクリア
             if (id === 'project_select') {
                 url.searchParams.delete('category_select');
                 url.searchParams.delete('operation_select');

@@ -1,8 +1,8 @@
-<!-- resources/views/task/index.blade.php -->
+
 <html>
 <head>
     <title>完了済みタスク一覧</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -17,6 +17,11 @@
 
 {{--<a href ="{{route('news.index',['sort'=>$nextSort,'keyword'=>$keyword])}}">投稿日付でソート({{$sort === '0' ? '昇順' : '降順' }})--}}
 {{--</a>--}}
+<br>
+
+<form method="GET" action="{{ route('task.index') }}">
+    <button type="submit">フィルタ適用</button>
+    <a href="{{ route('task.index') }}">クリア</a>
 
 <table >
     <tr>
@@ -30,6 +35,47 @@
         <th>進捗（％）</th>
         <th>備考</th>
     </tr>
+
+    <tr>
+        <td></td>
+        <td><input type="text" name="name" value="{{ request('name') }}"></td>
+        <td>
+            <select name="project_select">
+                <option value="">--</option>
+                @foreach ($project_names as $project_name)
+                    <option value="{{ $project_name->id }}" {{ request('project_select') == $project_name->id ? 'selected' : '' }}>
+                        {{ $project_name->name }}
+                    </option>
+                @endforeach
+            </select>
+        </td>
+        <td>
+            <select name="category_select">
+                <option value="">--</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}" {{ request('category_select') == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+        </td>
+        <td>
+            <select name="operation_select">
+                <option value="">--</option>
+                @foreach($operations as $operation)
+                    <option value="{{ $operation->id }}" {{ request('operation_select') == $operation->id ? 'selected' : '' }}>
+                        {{ $operation->name }}
+                    </option>
+                @endforeach
+            </select>
+        </td>
+        <td><input type="date" name="filters[start_date]" value="{{ request('filters.start_date') }}"></td>
+        <td><input type="date" name="filters[end_date]" value="{{ request('filters.end_date') }}"></td>
+
+        <td></td>
+        <td></td>
+    </tr>
+
     @foreach($tasks as $task)
         <tr>
             <td>{{$loop->iteration}}.</td>
@@ -52,6 +98,9 @@
     <p>{{ session('completed') }}</p>
 @endif
 
+<div>
+    {{ $tasks->appends(request()->query())->links('pagination::bootstrap-4') }}
+</div>
 
 </body>
 </html>
