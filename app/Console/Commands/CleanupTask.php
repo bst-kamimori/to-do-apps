@@ -43,17 +43,18 @@ class CleanupTask extends Command
 
         if($dryrun) {
             $rows = $query->orderBy('end_date')
-                ->get(['id','name','operation_id','end_date'])
+                ->get(['id','name','operation_id','start_date','end_date'])
                 ->map(function($task){
                     return [
                         'id' => $task->id,
                         'name' => $task->name,
                         'operation_id' => $task->operation_id,
+                        'start_date' => $task->start_date->toDateString(),
                         'end_date' => $task->end_date?->toDateString(),
                     ];
                 })->toArray();
 
-            $this->table(['id','name','operation_id','end_date'], $rows);
+            $this->table(['id','name','operation_id','start_date','end_date'], $rows);
             $this->info('dry-runのため削除は行いません。');
             return 0;
         }
