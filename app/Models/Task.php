@@ -19,9 +19,14 @@ class Task extends Model
         'created_at',
         'updated_at',
         'is_completed',
-        'project_name_id'
+        'operation_id'
     ];
 
+    // end_date を Carbon インスタンスとして扱うためにキャストを追加
+    protected $casts = [
+        'is_completed' => 'boolean',
+        'end_date' => 'date',
+    ];
 
     public function project_name(): BelongsTo
     {

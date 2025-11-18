@@ -15,7 +15,7 @@ class CleanupTask extends Command
      * @var string
      */
     protected $signature = 'task:cleanup {--days=30} {--dry-run}';
-    protected $description = '完了済みで指定日数より古いタスクを削除する。--dry-runで削除せず一覧表示する。';
+    protected $description = '完了済みかつ期限が指定日数より古いタスクを削除する。--dry-runで削除せず一覧表示する。';
 
     /**
      * Execute the console command.
@@ -27,8 +27,10 @@ class CleanupTask extends Command
 
         $cutoff = Carbon::now()->subDays($days);
 
+        // end_dateがNULLのものを除外し、期限がカットオフより前の完了タスクを対象にする
         $query = Task::where('is_completed', true)
-            ->where('updated_at', '<', $cutoff);
+            ->whereNotNull('end_date')
+            ->where('end_date', '<', $cutoff);
 
         $count = $query->count();
 
@@ -37,21 +39,21 @@ class CleanupTask extends Command
             return 0;
         }
 
-        $this->info("削除対象タスク数：{$count}（更新日<{$cutoff->toDateString()}）");
+        $this->info("削除対象タスク数：{$count}（期限<{$cutoff->toDateString()}）");
 
         if($dryrun) {
-            $rows = $query->orderBy('updated_at')
-                ->get(['id','name','project_name_id','updated_at'])
+            $rows = $query->orderBy('end_date')
+                ->get(['id','name','operation_id','end_date'])
                 ->map(function($task){
                     return [
                         'id' => $task->id,
                         'name' => $task->name,
-                        'project_name_id' => $task->project_name_id,
-                        'updated_at' => $task->updated_at->toDateString(),
+                        'operation_id' => $task->operation_id,
+                        'end_date' => $task->end_date?->toDateString(),
                     ];
                 })->toArray();
 
-            $this->table(['id','name','project_name_id','updated_at'], $rows);
+            $this->table(['id','name','operation_id','end_date'], $rows);
             $this->info('dry-runのため削除は行いません。');
             return 0;
         }
