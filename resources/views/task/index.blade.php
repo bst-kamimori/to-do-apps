@@ -73,8 +73,8 @@
                 @endforeach
             </select>
         </td>
-        <td><input type="date" name="filters[start_date]" value="{{ request('filters.start_date') }}"></td>
-        <td><input type="date" name="filters[end_date]" value="{{ request('filters.end_date') }}"></td>
+        <td><input type="date" name="start_date" value="{{ request('start_date') }}"></td>
+        <td><input type="date" name="end_date" value="{{ request('end_date') }}"></td>
 
         <td></td>
         <td></td>
@@ -96,14 +96,10 @@
         </tr>
 
     @endforeach
+
 </table>　　　　
-{{--@endif--}}
 </form>
 
-
-<div>
-    {{ $tasks->appends(request()->query())->links('pagination::bootstrap-4') }}
-</div>
 
 @if(session('success'))
     <p>{{session('success')}}</p>
@@ -112,6 +108,10 @@
 @if(session('remove'))
     <p>{{session('remove')}}</p>
 @endif
+
+<div>
+    {{ $tasks->appends(request()->query())->links('pagination::bootstrap-4') }}
+</div>
 
 </body>
 </html>

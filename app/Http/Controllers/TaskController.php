@@ -20,7 +20,7 @@ class TaskController extends Controller
 
         $query = Task::with(['project_name','category','operation']);
 
-        // 統一したパラメータ名で取得
+
         $name = $request->input('name');
         $selectedProjectId = $request->input('project_select');
         $selectedCategoryId = $request->input('category_select');
@@ -52,7 +52,6 @@ class TaskController extends Controller
         $project_names = ProjectName::all();
         $categories = Category::all();
         $operations = Operation::all();
-
 
         return view('task.index', compact('tasks', 'project_names', 'categories', 'operations'));
     }

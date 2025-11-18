@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
+use  App\Console\Commands\CleanupTask;
 use Illuminate\Support\Facades\Artisan;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+Artisan::command('task:cleanup {--days=30} {--dry-run}', function () {
+    $command = app(CleanupTask::class);
+    $command->setLaravel(app());
+
+    return $command->run($this->input,$this->output);
+})->purpose('完了済みで指定日数より古いタスクを削除する（--dry-runは一覧表示）');

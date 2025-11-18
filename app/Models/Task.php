@@ -10,7 +10,17 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected $table = 'tasks';
+    protected $fillable = [
+        'name',
+        'start_date',
+        'end_date',
+        'progress',
+        'remarks',
+        'created_at',
+        'updated_at',
+        'is_completed',
+        'project_name_id'
+    ];
 
 
     public function project_name(): BelongsTo

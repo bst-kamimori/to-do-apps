@@ -19,11 +19,12 @@
 {{--</a>--}}
 <br>
 
-<form method="GET" action="{{ route('task.index') }}">
+<form method="GET" action="{{ url('/task/complete/list') }}">
     <button type="submit">フィルタ適用</button>
-    <a href="{{ route('task.index') }}">クリア</a>
+    <a href="{{ url('/task/complete/list') }}">クリア</a>
 
-<table >
+<table>
+
     <tr>
         <th>No.</th>
         <th>担当</th>
@@ -69,8 +70,8 @@
                 @endforeach
             </select>
         </td>
-        <td><input type="date" name="filters[start_date]" value="{{ request('filters.start_date') }}"></td>
-        <td><input type="date" name="filters[end_date]" value="{{ request('filters.end_date') }}"></td>
+        <td><input type="date" name="start_date" value="{{ request('start_date') }}"></td>
+        <td><input type="date" name="end_date" value="{{ request('end_date') }}"></td>
 
         <td></td>
         <td></td>
@@ -80,8 +81,7 @@
         <tr>
             <td>{{$loop->iteration}}.</td>
             <td><a href="{{route('task.show',['id'=>$task->id])}}">{{$task->name}}</a></td>
-            <td>{{$task->name}}</td>
-            <td>{{ optional($task->project)->name }}</td>
+            <td>{{ optional($task->project_name)->name }}</td>
             <td>{{ optional($task->category)->name }}</td>
             <td>{{ optional($task->operation)->name }}</td>
             <td>{{$task->start_date}}</td>
@@ -92,8 +92,11 @@
 
     @endforeach
 
+
 </table>
-　　　　
+</form>>
+
+        　　　
 @if(session('completed'))
     <p>{{ session('completed') }}</p>
 @endif

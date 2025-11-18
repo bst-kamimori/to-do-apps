@@ -12,6 +12,7 @@
                     {{ __("You're logged in!") }}
                 </div>
                 <div>
+                    <br>
                     <a href="/task">タスク一覧へ</a>
                 </div>
             </div>
