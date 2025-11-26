@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Operation;
 use App\Models\ProjectName;
 use App\Models\Task;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -95,6 +96,9 @@ class TaskController extends Controller
             'name' => 'required|string|max:300',
             'progress' => 'required|string|min:0|max:100',
             'remarks' => 'required|string|max:60000',
+            'is_recurring' => 'nullable|boolean',
+            'recurrence' => 'required_if:is_recurring,1|in:daily,weekly',
+            'next_run_at'=> 'required_if:is_recurring,1|date'
         ]);
 
         $task = new Task();
@@ -106,8 +110,19 @@ class TaskController extends Controller
         $task->end_date = $request->input('end_date');
         $task->progress = $request->input('progress');
         $task->remarks = $request->input('remarks');
-        $task->save();
 
+        // 定期設定を保存する
+        $isRecurring = $request->boolean('is_recurring');
+        $task->is_recurring = $isRecurring;
+        if ($isRecurring) {
+            $task->recurrence = $request->input('recurrence');
+            $task->next_run_at = $request->filled('next_run_at')?Carbon::parse($request->input('next_run_at')):null;
+        } else {
+            $task->recurrence = null;
+            $task->next_run_at = null;
+        }
+
+        $task->save();
 
         return redirect()->route('task.index')->with('success','タスクが保存されました');
     }
