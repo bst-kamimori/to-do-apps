@@ -49,7 +49,7 @@ class CleanupTask extends Command
                         'id' => $task->id,
                         'name' => $task->name,
                         'operation_id' => $task->operation_id,
-                        'start_date' => $task->start_date->toDateString(),
+                        'start_date' => $task->start_date?->toDateString(),
                         'end_date' => $task->end_date?->toDateString(),
                     ];
                 })->toArray();

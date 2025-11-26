@@ -22,9 +22,10 @@ class Task extends Model
         'operation_id'
     ];
 
-    // end_date を Carbon インスタンスとして扱うためにキャストを追加
+    // end_dateをCarbonインスタンスとして扱うため追加
     protected $casts = [
         'is_completed' => 'boolean',
+        'start_date' => 'date',
         'end_date' => 'date',
     ];
 
