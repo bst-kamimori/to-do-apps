@@ -113,6 +113,7 @@
 
 <p><a href="{{ route('task.masterlist') }}">マスタ登録へ</a></p>
 
+{{--案件・カテゴリ・業務名を連動させた動的なセレクトボックス--}}
 <script>
     const selectTargets = {
         'project_select': 'project_select',

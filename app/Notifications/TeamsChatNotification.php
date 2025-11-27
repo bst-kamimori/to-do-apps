@@ -13,7 +13,7 @@ use NotificationChannels\MicrosoftTeams\ContentBlocks\FactSet;
 use NotificationChannels\MicrosoftTeams\ContentBlocks\Fact;
 use NotificationChannels\MicrosoftTeams\Actions\ActionOpenUrl;
 
-
+// Teamsへの通知処理
 class TeamsChatNotification extends Notification
 {
 //    use Queueable;
@@ -26,6 +26,11 @@ class TeamsChatNotification extends Notification
         return [MicrosoftTeamsChannel::class];
     }
 
+    /**
+     * @param $notifiable
+     * @return MicrosoftTeamsAdaptiveCard
+     * @throws \NotificationChannels\MicrosoftTeams\Exceptions\CouldNotSendNotification
+     */
     public function toMicrosoftTeams($notifiable)
     {
         return MicrosoftTeamsAdaptiveCard::create()

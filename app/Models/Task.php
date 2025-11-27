@@ -8,8 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
+    /**
+     * @var string $table
+     */
     use HasFactory;
 
+    /**
+     * @var string[] $fillable
+     */
     protected $fillable = [
         'name',
         'start_date',
@@ -22,6 +28,9 @@ class Task extends Model
         'operation_id'
     ];
 
+    /**
+     * @var string[] $casts
+     */
     // end_dateをCarbonインスタンスとして扱うため追加
     protected $casts = [
         'is_completed' => 'boolean',
@@ -29,16 +38,25 @@ class Task extends Model
         'end_date' => 'date',
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function project_name(): BelongsTo
     {
         return $this->belongsTo(ProjectName::class, 'project_name_id', 'id');
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function operation(): BelongsTo
     {
         return $this->belongsTo(Operation::class, 'operation_id', 'id');

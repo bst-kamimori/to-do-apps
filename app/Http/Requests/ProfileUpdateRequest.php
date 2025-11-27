@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+// プロフィール更新時の入力検証を集中管理する
 class ProfileUpdateRequest extends FormRequest
 {
     /**

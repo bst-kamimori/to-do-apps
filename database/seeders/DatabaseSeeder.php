@@ -8,6 +8,9 @@ use App\Models\Category;
 use App\Models\Operation;
 use Illuminate\Database\Seeder;
 
+/**
+ * DatabaseSeeder
+ */
 class DatabaseSeeder extends Seeder
 {
     /**

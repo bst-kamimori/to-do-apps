@@ -8,8 +8,12 @@ use App\Models\Category;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
  */
+
 class CategoryFactory extends Factory
 {
+    /**
+     * @var string
+     */
     protected $model = Category::class;
     /**
      * Define the model's default state.

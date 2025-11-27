@@ -23,6 +23,7 @@ Route::prefix('task')
         Route::get('masterlist','masterlist')->name('masterlist');
         Route::post('masterlist','masterliststore')->name('masterlist.store');
         Route::get('complete/list','completelist')->name('complete.list');
+        // タスク詳細画面
         Route::post('{id}/complete','complete')->name('complete');
         Route::get('{id}','show')->name('show');
         Route::put('{id}','update')->name('update');
@@ -31,7 +32,7 @@ Route::prefix('task')
 
 
     });
-
+// ユーザー認証画
 Route::get('/', function () {
     return view('welcome');
 });

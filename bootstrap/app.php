@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })
+    // 定期タスクの処理時間の指定
     ->withSchedule(function (Schedule $schedule) {
         $schedule->job(new CreateRecurringTasksJob())->dailyAt('12:33');
 

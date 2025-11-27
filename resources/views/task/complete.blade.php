@@ -36,7 +36,7 @@
         <th>進捗（％）</th>
         <th>備考</th>
     </tr>
-
+{{--    案件・カテゴリ・業務名を連動させた動的セレクトボックス--}}
     <tr>
         <td></td>
         <td><input type="text" name="name" value="{{ request('name') }}"></td>

@@ -67,7 +67,7 @@
     </p>
 
 </form>
-
+{{--案件名・カテゴリー・業務名を連動させた動的セレクトボックス--}}
 <script>
     const selectTargets = {
         'project_select': 'project_select',
@@ -84,7 +84,7 @@
             if (value) url.searchParams.set(paramName, value);
             else url.searchParams.delete(paramName);
 
-            // project を変えたら下位をクリア
+            // project を変えたらカテゴリー・業務名をクリア
             if (id === 'project_select') {
                 url.searchParams.delete('category_select');
                 url.searchParams.delete('operation_select');

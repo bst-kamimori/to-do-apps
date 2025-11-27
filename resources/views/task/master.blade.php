@@ -1,6 +1,4 @@
-<?php
-// resources/views/task/master.blade.php
-?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +9,7 @@
 
 <form action="/task/masterlist" method="GET">
 
+{{--    案件・カテゴリ・業務名が連動した動的なセレクトボックス--}}
     <label>案件</label>
     <select name="project_select" id="project-select">
         <option value="">-- 案件を選択 --</option>
@@ -67,9 +66,6 @@
 
 </script>
 
-
-
-
 <form method="POST" action="{{ route('task.masterlist.store') }}">
     @csrf
 
@@ -88,7 +84,7 @@
         <input type="text" name="operations" value="{{ old('operations') }}">
     @endif
 
-{{--    既存値を渡す--}}
+{{--    既存値を次のクラスに渡す--}}
     <input type="hidden" name="project_select" value="{{ request('project_select') }}">
     <input type="hidden" name="category_select" value="{{ request('category_select') }}">
     <input type="hidden" name="operation_select" value="{{ request('operation_select') }}">

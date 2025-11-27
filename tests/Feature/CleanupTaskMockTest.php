@@ -8,6 +8,10 @@ use App\Models\Task;
 use Mockery;
 use Carbon\Carbon;
 
+/**
+ * CleanupTask コマンドのモックテスト
+ * @see \App\Console\Commands\CleanupTask
+ */
 class CleanupTaskMockTest extends TestCase
 {
     protected function setUp(): void

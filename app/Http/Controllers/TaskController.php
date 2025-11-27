@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class TaskController extends Controller
 {
 
-    /**  */
+    // フロント一覧表示
     public function index(Request $request)
     {
 
@@ -29,6 +29,7 @@ class TaskController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
+        // 検索ボックスでのフィルタを適用
         if (!empty($name)) {
             $query->where('name', 'LIKE', "%{$name}%");
         }
@@ -57,11 +58,12 @@ class TaskController extends Controller
         return view('task.index', compact('tasks', 'project_names', 'categories', 'operations'));
     }
 
-
+    // タスクの新規登録
     public function create(Request $request)
     {
         $project_names = ProjectName::all();
 
+        //案件名・カテゴリ・業務名を紐づけて動的に表示させる
         $selectedProjectId = $request->input('project_select');
         $selectedCategoryId = $request->input('category_select');
 
@@ -89,6 +91,7 @@ class TaskController extends Controller
             return view('task.create', compact('task', 'project_names','categories','operations','keyword'));
     }
 
+    // タスクの新規登録の保存
     public function store(Request $request)
     {
 
@@ -111,7 +114,7 @@ class TaskController extends Controller
         $task->progress = $request->input('progress');
         $task->remarks = $request->input('remarks');
 
-        // 定期設定を保存する
+        // 定期設定を保存する。未完成
         $isRecurring = $request->boolean('is_recurring');
         $task->is_recurring = $isRecurring;
         if ($isRecurring) {
@@ -127,16 +130,19 @@ class TaskController extends Controller
         return redirect()->route('task.index')->with('success','タスクが保存されました');
     }
 
+    // タスクの詳細表示
     public function show(Request $request,$id)
     {
         $task= Task::with(['project_name','category','operation'])->findOrFail($id);
         return view('task.show',compact('task'));
     }
 
+    //詳細表示からの編集画面
     public function edit(Request $request,$id)
     {
         $project_names = ProjectName::all();
 
+        //案件名・カテゴリ・業務名を紐づけて動的に表示させる
         $selectedProjectId = $request->input('project_select');
         $selectedCategoryId = $request->input('category_select');
 
@@ -164,6 +170,7 @@ class TaskController extends Controller
 
     }
 
+    // //詳細表示の編集保存
     public function update(Request $request,$id)
     {
         $task = Task::findOrFail($id);
@@ -188,6 +195,7 @@ class TaskController extends Controller
             ->with('success',"更新しました！");
     }
 
+    // 詳細画面からのタスク削除
     public function delete($id)
     {
         try {
@@ -199,6 +207,7 @@ class TaskController extends Controller
         }
     }
 
+    // 詳細画面での完了済み登録
     public function complete($id)
     {
         $tasks = Task::findOrFail($id);
@@ -208,6 +217,7 @@ class TaskController extends Controller
         return redirect()->route('task.complete.list')->with('completed','タスクを完了済みにしました');
     }
 
+    // 完了済み登録の一覧表示
     public function completelist(Request $request)
     {
         $query = Task::where('is_completed',true);
@@ -220,6 +230,7 @@ class TaskController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
+        // 検索ボックスでのフィルタを適用
         if (!empty($name)) {
             $query->where('name', 'LIKE', "%{$name}%");
         }
@@ -248,6 +259,7 @@ class TaskController extends Controller
         return view('task.complete',compact('tasks', 'project_names', 'categories', 'operations'));
     }
 
+    // マスタリストの動的表示
     public function masterlist(Request $request)
     {
         $projects = ProjectName::all();
@@ -268,6 +280,7 @@ class TaskController extends Controller
         return view('task.master',compact('projects','categories','operations'));
     }
 
+    // マスタリストの新規登録保存
     public function masterliststore(Request $request)
     {
         $date = $request->validate([
@@ -279,6 +292,7 @@ class TaskController extends Controller
             'operations' => 'required_if:operation_select,new|string|max:300',
         ]);
 
+        // 案件・カテゴリ・業務名の連動した動的登録処理
         DB::beginTransaction();
         try {
             if (isset($date['project_select']) && $date['project_select'] === 'new' && !empty($date['project_names'])){

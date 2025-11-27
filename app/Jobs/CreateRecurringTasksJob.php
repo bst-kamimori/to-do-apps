@@ -11,18 +11,27 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
+// 定期タスクの登録
 class CreateRecurringTasksJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * Execute the job.
+     *
+     * @return void
+     * @throws \Throwable
+     */
     public function handle(): void
     {
         $now = Carbon::now();
 
+        // 定期タスクのテンプレートを取得
         $templates = Task::where('is_recurring', true)
             ->whereNotNull('next_run_at')
             ->where('next_run_at', '<=', $now)
             ->get();
+
 
         foreach ($templates as $template) {
             DB::transaction(function () use ($template,$now) {
@@ -35,7 +44,7 @@ class CreateRecurringTasksJob implements ShouldQueue
                 $new->save();
 
                 $currentNext = Carbon::parse($template->next_run_at);
-
+                // 毎日・毎週の選択
                 switch ($template->recurrence) {
                     case 'daily':
                       $template->next_run_at = $currentNext->copy()->addDay();

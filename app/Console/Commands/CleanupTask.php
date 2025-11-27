@@ -13,12 +13,16 @@ class CleanupTask extends Command
      * The name and signature of the console command.
      *
      * @var string
+     *
      */
     protected $signature = 'task:cleanup {--days=30} {--dry-run}';
     protected $description = '完了済みかつ期限が指定日数より古いタスクを削除する。--dry-runで削除せず一覧表示する。';
 
     /**
      * Execute the console command.
+     *
+     * @return int
+     * @throws \Throwable
      */
     public function handle(): int
     {
@@ -27,7 +31,7 @@ class CleanupTask extends Command
 
         $cutoff = Carbon::now()->subDays($days);
 
-        // end_dateがNULLのものを除外し、期限がカットオフより前の完了タスクを対象にする
+        // end_dateがNULLのものを除外し、期限がカットオフより前の完了タスクを対象にタスクを削除
         $query = Task::where('is_completed', true)
             ->whereNotNull('end_date')
             ->where('end_date', '<', $cutoff);
@@ -41,6 +45,7 @@ class CleanupTask extends Command
 
         $this->info("削除対象タスク数：{$count}（期限<{$cutoff->toDateString()}）");
 
+        // dryrunで削除対象の一覧を表示
         if($dryrun) {
             $rows = $query->orderBy('end_date')
                 ->get(['id','name','operation_id','start_date','end_date'])

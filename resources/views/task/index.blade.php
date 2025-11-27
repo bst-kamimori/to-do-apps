@@ -12,7 +12,6 @@
 <p><a href="{{route('task.complete.list')}}">完了済みタスク一覧</a></p>
 
 
-
 {{--@php--}}
 {{--    $nextSort=($sort === '1') ? '0' : '1';--}}
 {{--@endphp--}}
@@ -39,7 +38,7 @@
         <th>備考</th>
         <th>更新日</th>
     </tr>
-
+{{--検索ボックスのフィルター--}}
     <tr>
         <td></td>
         <td><input type="text" name="name" value="{{ request('name') }}"></td>
