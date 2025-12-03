@@ -23,19 +23,28 @@
 </table>
 
 
-
+@if($task->is_completed!=1)
 <form action="{{route('task.complete',['id'=>$task->id])}}" method="POST" onsubmit="return confirm('完了済みに移動させちゃう？');">
     @csrf
     <button type="submit">完了済み</button>
 </form>
+@endif
 <form action="{{route('task.delete',['id'=>$task->id])}}" method="POST" onsubmit="return confirm('削除しますか？');">
     @csrf
     @method('DELETE')
     <button type="submit">削除</button>
 </form>
+@if($task->is_completed!=1)
+    <p><a href="{{route('task.edit',['id'=>$task->id])}}">編集する</a> </p>
+@endif
+@if($task->is_completed=0)
+    <p><a href="/task">タスク一覧へ</a></p>
+@endif
+@if($task->is_completed=1)
+    <p><a href="complete/list">完了済みタスク一覧へ</a></p>
+@endif
 
-<p><a href="{{route('task.edit',['id'=>$task->id])}}">編集する</a> </p>
-<p><a href="/task">タスク一覧へ</a></p>
+
 
 </body>
 </html>
