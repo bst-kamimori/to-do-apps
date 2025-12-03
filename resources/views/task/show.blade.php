@@ -14,7 +14,7 @@
 <table>
     <tr><th align="left">担当:</th><th align="left">{{ $task->name }}</th></tr>
     <tr><th align="left">案件名:</th><th align="left">{{ optional($task->project_name)->name }}</th></tr>
-    <tr><th align="left">カテゴリー:</th><th align="left">{{ optional($task->category)->name }}</th></tr>
+    <tr><th align="left">カテゴリ:</th><th align="left">{{ optional($task->category)->name }}</th></tr>
     <tr><th align="left">業務名:</th><th align="left">{{ optional($task->operation)->name }}</th></tr>
     <tr><th align="left">開始日:</th><th align="left">{{ $task->start_date }}</th></tr>
     <tr><th align="left">期限:</th><th align="left">{{ $task->end_date }}</th></tr>
@@ -37,10 +37,9 @@
 @if($task->is_completed!=1)
     <p><a href="{{route('task.edit',['id'=>$task->id])}}">編集する</a> </p>
 @endif
-@if($task->is_completed=0)
+@if($task->is_completed!=1)
     <p><a href="/task">タスク一覧へ</a></p>
-@endif
-@if($task->is_completed=1)
+@else
     <p><a href="complete/list">完了済みタスク一覧へ</a></p>
 @endif
 

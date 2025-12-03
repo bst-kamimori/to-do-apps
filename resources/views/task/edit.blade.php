@@ -52,11 +52,12 @@
                 </select>
             </td>
         </tr>
+{{--        開始日・期限をテキストボックス→日時選択に変更したい--}}
         <tr><th>開始日:</th><th><input type="text" name="start_date" value="{{ old('start_date', $task->start_date) }}"></th></tr>
         <tr><th>期限:</th><th><input type="text" name="end_date" value="{{ old('end_date', $task->end_date) }}"></th></tr>
         <tr><th>進捗（％）:</th><th><input type="text" name="progress" value="{{ old('progress', $task->progress) }}"></th></tr>
         <tr><th>備考:</th><th><input type="text" name="remarks" value="{{ old('remarks', $task->remarks) }}"></th></tr>
-        <tr><th>更新日:</th><th><input type="text" name="created_at" value="{{ old('created_at', $task->created_at) }}"></th></tr>
+        <tr><th>更新日:</th><th>{{ old('created_at', $task->created_at) }}</th></tr>
 
 
 
@@ -67,7 +68,7 @@
     </p>
 
 </form>
-{{--案件名・カテゴリー・業務名を連動させた動的セレクトボックス--}}
+{{--案件名・カテゴリ・業務名を連動させた動的セレクトボックス--}}
 <script>
     const selectTargets = {
         'project_select': 'project_select',
@@ -84,7 +85,7 @@
             if (value) url.searchParams.set(paramName, value);
             else url.searchParams.delete(paramName);
 
-            // project を変えたらカテゴリー・業務名をクリア
+            // project を変えたらカテゴリ・業務名をクリア
             if (id === 'project_select') {
                 url.searchParams.delete('category_select');
                 url.searchParams.delete('operation_select');

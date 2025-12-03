@@ -19,7 +19,7 @@ class TaskController extends Controller
     public function index(Request $request)
     {
 
-        $query = Task::with(['project_name','category','operation']);
+        $query = Task::where('is_completed',0)->with(['project_name','category','operation']);
 
 
         $name = $request->input('name');
