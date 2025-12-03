@@ -127,7 +127,7 @@ class TaskController extends Controller
 
         $task->save();
 
-        return redirect()->route('task.index')->with('success','タスクが保存されました');
+        return redirect()->route('task.index')->with('success','タスクが保存されました。');
     }
 
     // タスクの詳細表示
@@ -214,7 +214,17 @@ class TaskController extends Controller
         $tasks->is_completed = true;
         $tasks->save();
 
-        return redirect()->route('task.complete.list')->with('completed','タスクを完了済みにしました');
+        return redirect()->route('task.complete.list')->with('completed','タスクを完了済みにしました。');
+    }
+
+    // 完了済みのタスクを未完了タスクに戻す
+    public function reopen($id)
+    {
+        $tasks = Task::findOrFail($id);
+        $tasks->is_completed = false;
+        $tasks->save();
+
+        return redirect()->route('task.index')->with('reopen','タスクを完了済みから戻しました。');
     }
 
     // 完了済み登録の一覧表示

@@ -94,7 +94,7 @@
 
 
 </table>
-</form>>
+</form>
 
         　　　
 @if(session('completed'))

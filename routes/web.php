@@ -25,6 +25,7 @@ Route::prefix('task')
         Route::get('complete/list','completelist')->name('complete.list');
         // タスク詳細画面
         Route::post('{id}/complete','complete')->name('complete');
+        Route::post('{id}/reopen','reopen')->name('reopen');
         Route::get('{id}','show')->name('show');
         Route::put('{id}','update')->name('update');
         Route::delete('{id}','delete')->name('delete');

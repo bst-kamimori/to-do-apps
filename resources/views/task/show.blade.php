@@ -52,6 +52,11 @@
     @csrf
     <button type="submit">完了済み</button>
 </form>
+@else
+<form action="{{route('task.reopen',['id'=>$task->id])}}" method="POST" onsubmit="return confirm('タスクを未完了に戻しますか？');">
+    @csrf
+    <button type="submit">未完了に戻す</button>
+</form>
 @endif
 <form action="{{route('task.delete',['id'=>$task->id])}}" method="POST" onsubmit="return confirm('削除しますか？');">
     @csrf
