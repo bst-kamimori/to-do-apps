@@ -12,19 +12,43 @@
 
 
 <table>
-    <tr><th align="left">担当:</th><th align="left">{{ $task->name }}</th></tr>
-    <tr><th align="left">案件名:</th><th align="left">{{ optional($task->project_name)->name }}</th></tr>
-    <tr><th align="left">カテゴリ:</th><th align="left">{{ optional($task->category)->name }}</th></tr>
-    <tr><th align="left">業務名:</th><th align="left">{{ optional($task->operation)->name }}</th></tr>
-    <tr><th align="left">開始日:</th><th align="left">{{ $task->start_date }}</th></tr>
-    <tr><th align="left">期限:</th><th align="left">{{ $task->end_date }}</th></tr>
-    <tr><th align="left">進捗:</th><th align="left">{{ $task->progress }}</th></tr>
-    <tr><th align="left">備考:</th><th align="left">{{ $task->remarks }}</th></tr>
+    <tr>
+        <th style="text-align: left;">担当:</th>
+        <td style="text-align: left;">{{ $task->name }}</td>
+    </tr>
+    <tr>
+        <th style="text-align: left;">案件名:</th>
+        <td style="text-align: left;">{{ optional($task->project_name)->name }}</td>
+    </tr>
+    <tr>
+        <th style="text-align: left;">カテゴリ:</th>
+        <td style="text-align: left;">{{ optional($task->category)->name }}</td>
+    </tr>
+    <tr>
+        <th style="text-align: left;">業務名:</th>
+        <td style="text-align: left;">{{ optional($task->operation)->name }}</td>
+    </tr>
+    <tr>
+        <th style="text-align: left;">開始日:</th>
+        <td style="text-align: left;">{{ $task->start_date }}</td>
+    </tr>
+    <tr>
+        <th style="text-align: left;">期限:</th>
+        <td style="text-align: left;">{{ $task->end_date }}</td>
+    </tr>
+    <tr>
+        <th style="text-align: left;">進捗:</th>
+        <td style="text-align: left;">{{ $task->progress }}</td>
+    </tr>
+    <tr>
+        <th style="text-align: left;">備考:</th>
+        <td style="text-align: left;">{{ $task->remarks }}</td>
+    </tr>
 </table>
 
 
 @if($task->is_completed!=1)
-<form action="{{route('task.complete',['id'=>$task->id])}}" method="POST" onsubmit="return confirm('完了済みに移動させちゃう？');">
+<form action="{{route('task.complete',['id'=>$task->id])}}" method="POST" onsubmit="return confirm('完了済みに移動させますか？');">
     @csrf
     <button type="submit">完了済み</button>
 </form>
