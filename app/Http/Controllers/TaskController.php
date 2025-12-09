@@ -96,9 +96,9 @@ class TaskController extends Controller
     {
 
         $request->validate([
-            'name' => 'required|string|max:300',
+            'name' => 'required|string|max:10',
             'progress' => 'required|string|min:0|max:100',
-            'remarks' => 'required|string|max:60000',
+            'remarks' => 'required|string|max:10',
             'is_recurring' => 'nullable|boolean',
             'recurrence' => 'required_if:is_recurring,1|in:daily,weekly',
             'next_run_at'=> 'required_if:is_recurring,1|date'

@@ -18,6 +18,9 @@
 {{--<a href ="{{route('news.index',['sort'=>$nextSort,'keyword'=>$keyword])}}">投稿日付でソート({{$sort === '0' ? '昇順' : '降順' }})--}}
 {{--</a>--}}
 <br>
+@if(session('completed'))
+    <p>{{ session('completed') }}</p>
+@endif
 
 <form method="GET" action="{{ url('/task/complete/list') }}">
     <button type="submit">フィルタ適用</button>
@@ -95,11 +98,6 @@
 
 </table>
 </form>
-
-        　　　
-@if(session('completed'))
-    <p>{{ session('completed') }}</p>
-@endif
 
 <div>
     {{ $tasks->appends(request()->query())->links('pagination::bootstrap-4') }}

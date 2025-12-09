@@ -20,6 +20,13 @@
 {{--</a>--}}
 
 <br>
+@if(session('success'))
+    <p>{{session('success')}}</p>
+@endif
+
+@if(session('remove'))
+    <p>{{session('remove')}}</p>
+@endif
 
 <form method="GET" action="{{ route('task.index') }}">
     <button type="submit">フィルタ適用</button>
@@ -100,13 +107,6 @@
 </form>
 
 
-@if(session('success'))
-    <p>{{session('success')}}</p>
-@endif
-
-@if(session('remove'))
-    <p>{{session('remove')}}</p>
-@endif
 
 <div>
     {{ $tasks->appends(request()->query())->links('pagination::bootstrap-4') }}
