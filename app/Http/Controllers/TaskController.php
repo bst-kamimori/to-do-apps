@@ -176,9 +176,9 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
 
         $request->validate([
-            'name'=>'required|string|min:1|max:500',
+            'name'=>'required|string|min:1|max:10',
             'progress' => 'required|string|min:0|max:100',
-            'remarks' => 'required|string|min:0|max:6000'
+            'remarks' => 'required|string|min:0|max:10'
         ]);
 
         $task->name = $request->input('name');

@@ -9,7 +9,6 @@
 
 <body>
 <h1>500 | Server Error</h1>
-<p>障害発生</p>
 </body>
 
 </html>
