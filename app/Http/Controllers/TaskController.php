@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\CreateRecurringTasksJob;
 
 
 class TaskController extends Controller
@@ -64,8 +65,8 @@ class TaskController extends Controller
         $project_names = ProjectName::all();
 
         //案件名・カテゴリ・業務名を紐づけて動的に表示させる
-        $selectedProjectId = $request->input('project_select');
-        $selectedCategoryId = $request->input('category_select');
+        $selectedProjectId = old('project_select', $request->input('project_select'));
+        $selectedCategoryId = old('category_select', $request->input('category_select'));
 
         $categories = collect();
         $operations = collect();
@@ -73,15 +74,13 @@ class TaskController extends Controller
         if (!is_null($selectedProjectId) && $selectedProjectId !== '') {
             $categories = Category::where('project_name_id', $selectedProjectId)->get();
         } else {
-
-             $categories = Category::all();
+            $categories = Category::all();
         }
 
         if (!is_null($selectedCategoryId) && $selectedCategoryId !== '') {
             $operations = Operation::where('category_id', $selectedCategoryId)->get();
         } else {
-
-             $operations = Operation::all();
+            $operations = Operation::all();
         }
 
          $task = Task::all();
@@ -94,15 +93,19 @@ class TaskController extends Controller
     // タスクの新規登録の保存
     public function store(Request $request)
     {
+        $isRecurring = $request->input('action') === 'recurring';
 
         $request->validate([
             'name' => 'required|string|max:10',
             'progress' => 'required|string|min:0|max:100',
             'remarks' => 'required|string|max:10',
-            'is_recurring' => 'nullable|boolean',
-            'recurrence' => 'required_if:is_recurring,1|in:daily,weekly',
-            'next_run_at'=> 'required_if:is_recurring,1|date'
+            'project_select' => 'required|integer',
+            'category_select' => 'required|integer',
+            'operation_select' => 'required|integer',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
         ]);
+
 
         $task = new Task();
         $task->name = $request->input('name');
@@ -114,21 +117,15 @@ class TaskController extends Controller
         $task->progress = $request->input('progress');
         $task->remarks = $request->input('remarks');
 
-        // 定期設定を保存する。未完成
-        $isRecurring = $request->boolean('is_recurring');
-        $task->is_recurring = $isRecurring;
-        if ($isRecurring) {
-            $task->recurrence = $request->input('recurrence');
-            $task->next_run_at = $request->filled('next_run_at')?Carbon::parse($request->input('next_run_at')):null;
-        } else {
-            $task->recurrence = null;
-            $task->next_run_at = null;
-        }
+       $task->is_recurring = $request->input('action') === 'recurring';
 
-        $task->save();
+    $task->save();
 
-        return redirect()->route('task.index')->with('success','タスクが保存されました。');
-    }
+    return redirect()
+        ->route('task.index')
+        ->with('success','タスクが保存されました。');
+}
+
 
     // タスクの詳細表示
     public function show(Request $request,$id)

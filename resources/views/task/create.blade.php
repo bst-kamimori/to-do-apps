@@ -8,6 +8,7 @@
 
 <form action="{{ route('task.store') }}" method="POST">
     @csrf
+
     <table>
         <tr>
             <th>担当:</th>
@@ -103,7 +104,7 @@
 
         <tr>
             <td colspan="2">
-                <button type="submit">タスクを保存する</button>
+                <button type="submit" name="action" value="save">タスクを保存する</button><button type="submit" name="action" value="recurring">定期タスクにする</button>
             </td>
         </tr>
     </table>
@@ -145,4 +146,4 @@
 
 </body>
 </html>
-<?php
+

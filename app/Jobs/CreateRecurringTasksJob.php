@@ -10,8 +10,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
-// 定期タスクの登録
+// 定期タスクの登録（ジョブによるスケジューラーの設定）
 class CreateRecurringTasksJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -33,6 +34,7 @@ class CreateRecurringTasksJob implements ShouldQueue
             ->get();
 
 
+        // 定期タスクの登録処理
         foreach ($templates as $template) {
             DB::transaction(function () use ($template,$now) {
                 $new = $template->replicate();
@@ -47,16 +49,22 @@ class CreateRecurringTasksJob implements ShouldQueue
                 // 毎日・毎週の選択
                 switch ($template->recurrence) {
                     case 'daily':
-                      $template->next_run_at = $currentNext->copy()->addDay();
-                      case 'weekly':
-                          $template->next_run_at = $currentNext->copy()->addWeek();
-                          break;
-                          default:
-                              $template->next_run_at = null;
-                              break;
+                        $template->next_run_at = $currentNext->copy()->addDay();
+                        break;
+                    case 'weekly':
+                        $template->next_run_at = $currentNext->copy()->addWeek();
+                        break;
+                        default:
+                        $template->next_run_at = null;
+                        break;
                 }
                 $template->save();
             });
         }
+
+        //成功しているのかの確認　tail -f storage/logs/laravel.log
+        Log::info('CreateRecurringTasksJob event listener fired.');
     }
 }
+
+
