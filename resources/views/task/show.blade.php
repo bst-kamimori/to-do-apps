@@ -58,11 +58,17 @@
     <button type="submit">未完了に戻す</button>
 </form>
 @endif
-<form action="{{route('task.delete',['id'=>$task->id])}}" method="POST" onsubmit="return confirm('削除しますか？');">
-    @csrf
-    @method('DELETE')
-    <button type="submit">削除</button>
-</form>
+    <form action="{{ route('task.delete', $task->id) }}" method="POST"
+          onsubmit="return confirm('削除しますか？');">
+        @csrf
+        @method('DELETE')
+        <button type="submit">削除</button>
+    </form>
+    <form action="{{ route('task.recurring', $task->id) }}" method="POST"
+          onsubmit="return confirm('定期タスクにしますか？');">
+        @csrf
+        <button type="submit">定期タスクにする</button>
+    </form>
 @if($task->is_completed!=1)
     <p><a href="{{route('task.edit',['id'=>$task->id])}}">編集する</a> </p>
 @endif

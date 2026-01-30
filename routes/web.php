@@ -29,6 +29,7 @@ Route::prefix('task')
         Route::get('{id}','show')->name('show');
         Route::put('{id}','update')->name('update');
         Route::delete('{id}','delete')->name('delete');
+        Route::post('{id}/recurring','recurring')->name('recurring');
         Route::get('{id}/edit','edit')->name('edit');
 
 

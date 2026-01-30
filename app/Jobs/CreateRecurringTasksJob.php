@@ -34,7 +34,7 @@ class CreateRecurringTasksJob implements ShouldQueue
             ->get();
 
 
-        // 定期タスクの登録処理
+        // 複製して定期タスクの登録処理
         foreach ($templates as $template) {
             DB::transaction(function () use ($template,$now) {
                 $new = $template->replicate();

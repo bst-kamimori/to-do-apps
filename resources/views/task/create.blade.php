@@ -104,7 +104,7 @@
 
         <tr>
             <td colspan="2">
-                <button type="submit" name="action" value="save">タスクを保存する</button><button type="submit" name="action" value="recurring">定期タスクにする</button>
+                <button>タスクを保存する</button>
             </td>
         </tr>
     </table>

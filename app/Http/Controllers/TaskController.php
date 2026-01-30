@@ -93,7 +93,6 @@ class TaskController extends Controller
     // タスクの新規登録の保存
     public function store(Request $request)
     {
-        $isRecurring = $request->input('action') === 'recurring';
 
         $request->validate([
             'name' => 'required|string|max:10',
@@ -106,7 +105,6 @@ class TaskController extends Controller
             'end_date' => 'nullable|date',
         ]);
 
-
         $task = new Task();
         $task->name = $request->input('name');
         $task->project_name_id = $request->input('project_select');
@@ -117,11 +115,9 @@ class TaskController extends Controller
         $task->progress = $request->input('progress');
         $task->remarks = $request->input('remarks');
 
-       $task->is_recurring = $request->input('action') === 'recurring';
+        $task->save();
 
-    $task->save();
-
-    return redirect()
+        return redirect()
         ->route('task.index')
         ->with('success','タスクが保存されました。');
 }
@@ -130,7 +126,14 @@ class TaskController extends Controller
     // タスクの詳細表示
     public function show(Request $request,$id)
     {
+        $isRecurring = $request->input('action') === 'recurring';
+
         $task= Task::with(['project_name','category','operation'])->findOrFail($id);
+
+        $task->is_recurring = $request->input('action') === 'recurring';
+
+        $task->save();
+
         return view('task.show',compact('task'));
     }
 
@@ -202,6 +205,18 @@ class TaskController extends Controller
         } catch (ModelNotFoundException $e) {
             abort(404);
         }
+    }
+
+    public function recurring(Request $request,$id)
+    {
+        $task = Task::findOrFail($id);
+        $task->is_recurring = true;
+        $task->recurrence = 'daily';
+        $task->next_run_at = now();  // 初回実行日時
+        $task->save();
+
+        return redirect()->route('task.show',['id'=>$task->id])
+            ->with('success','定期タスクに設定しました。');
     }
 
     // 詳細画面での完了済み登録
